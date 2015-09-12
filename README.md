@@ -29,6 +29,7 @@ Monolith is a Windows library that lets you create animations in codebehind in a
 
 ### Use Monolith in your project
 Check out [Monolith on NuGet](https://www.nuget.org/packages/Monolith/)!
+
     PM> Install-Package Monolith
 
 ### Use and extend Monolith
