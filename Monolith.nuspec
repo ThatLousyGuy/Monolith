@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>1.0.0.0</version>
+    <title>Lousy.Monolith</title>
+    <authors>Lousy</authors>
+    <owners>Lousy</owners>
+    <licenseUrl>https://raw.githubusercontent.com/ThatLousyGuy/Monolith/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/ThatLousyGuy/Monolith</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Monolith is a Windows library that lets you create animations in codebehind in a fluent, somewhat straightforward manner. It's a wrapper around the Windows.UI.Xaml.Media.Animation library that removes as much of the setup as possible.</description>
+    <releaseNotes>First release of Monolith package</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Monolith Lousy</tags>
+  </metadata>
+</package>
+

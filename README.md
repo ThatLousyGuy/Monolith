@@ -15,11 +15,9 @@ Monolith is a Windows library that lets you create animations in codebehind in a
 
     // Rotate UIElement to 90 degrees 
     EventToken rotating =
-        Oli.Rotate(uiElem).To(90).For(0.3, OrSo.Secs).With(ExpEaseOut)
-           .Now();
+        Oli.Rotate(uiElem).To(90).For(0.3, OrSo.Secs).With(ExpEaseOut).Now();
     // Fade the opacity to 0 after the rotation finishes
-    Oli.Fade(uiElem).To(0).For(0.3, OrSo.Secs).With(ExpEaseOut)
-       .After(rotating);
+    Oli.Fade(uiElem).To(0).For(0.3, OrSo.Secs).With(ExpEaseOut).After(rotating);
 
     // Run arbitrary code after the rotation too
     Oli.Run(() =>
@@ -28,13 +26,19 @@ Monolith is a Windows library that lets you create animations in codebehind in a
     }).After(rotating);
 
 ## Setup
-- Clone this git repo and include the csproj in your solution
+
+### Use Monolith in your project
+Check out [Monolith on NuGet](https://www.nuget.org/packages/Monolith/)!
+  PM> Install-Package Monolith
+
+### Use and extend Monolith
+- Clone this git repo and include the .csproj file in your solution
 - Reference Monolith.dll under ../Monolith/bin/ once you compile
-- That's it!
+- Hack away!
 
 ## Known issues
 - Classes and methods aren't documented very well right now. It's next on the todo list
-- Using .After(double duration, OrSo type) on successively on the same object with the same animation type is broken (the last call overwrites the previous ones) and it requires an architectural change to fix. Use .After(EventToken token, double duration, OrSo type) instead.
+- Using .After(double duration, OrSo type) on successively on the same object with the same animation type is broken (the last call overwrites the previous ones) and it requires an architectural change to fix. Use .After(EventToken token, double duration, OrSo type) instead
 
 ## Testing
 HA
