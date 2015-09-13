@@ -3,6 +3,9 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Lousy.Mon
 {
+    /// <summary>
+    /// A frontend for animating an arbitrary property of a UIElement
+    /// </summary>
     public class PropertyAnimator : AbstractDoubleAnimator
     {
         protected string _propPath = null;

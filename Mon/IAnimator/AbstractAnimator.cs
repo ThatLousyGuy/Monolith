@@ -24,12 +24,24 @@ namespace Lousy.Mon
             _reverse = false;
         }
 
+        /// <summary>
+        /// Sets the easing function to use for the animation.
+        /// Easing function objects can be reused between animations.
+        /// </summary>
+        /// <param name="ease"></param>
+        /// <returns></returns>
         public IAnimator With(EasingFunctionBase ease)
         {
             _ease = ease;
             return this;
         }
 
+        /// <summary>
+        /// Sets the duration of the animation.
+        /// </summary>
+        /// <param name="duration"></param>
+        /// <param name="timeType"></param>
+        /// <returns></returns>
         public IAnimator For(double duration, OrSo timeType)
         {
             _duration = new Duration(GetTimeSpan(duration, timeType));
@@ -38,6 +50,10 @@ namespace Lousy.Mon
             return this;
         }
 
+        /// <summary>
+        /// Sets whether to reverse the animation.
+        /// </summary>
+        /// <returns></returns>
         public IAnimator AndReverseIt()
         {
             _reverse = true;
@@ -45,6 +61,10 @@ namespace Lousy.Mon
             return this;
         }
 
+        /// <summary>
+        /// Executes the animation immediately.
+        /// </summary>
+        /// <returns>A token representing the animation</returns>
         public EventToken Now()
         {
             if (_storyboard == null)
@@ -63,6 +83,12 @@ namespace Lousy.Mon
             return _eventToken;
         }
 
+        /// <summary>
+        /// Executes the animation after a specified duration.
+        /// </summary>
+        /// <param name="duration"></param>
+        /// <param name="timeType"></param>
+        /// <returns>A token representing the animation</returns>
         public EventToken After(double duration, OrSo timeType)
         {
             if (_storyboard == null)
@@ -96,6 +122,11 @@ namespace Lousy.Mon
             _storyboard.Children.Add(_animation);
         }
 
+        /// <summary>
+        /// Executes the animation after the animation represented by the specified token.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>A token representing the animation</returns>
         public EventToken After(EventToken token)
         {
             if (_storyboard == null)
@@ -114,6 +145,13 @@ namespace Lousy.Mon
             return _eventToken;
         }
 
+        /// <summary>
+        /// Executes the animation after a specified duration after the animation represented by the specified token.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="duration"></param>
+        /// <param name="timeType"></param>
+        /// <returns>A token representing the animation</returns>
         public EventToken After(EventToken token, double duration, OrSo timeType)
         {
             if (_storyboard == null)

@@ -4,6 +4,9 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Lousy.Mon
 {
+    /// <summary>
+    /// A frontend for animating the height of a UIElement
+    /// </summary>
     public class HeightAnimator: AbstractDoubleAnimator 
     {
         public HeightAnimator(UIElement elem) : base(elem) { }
@@ -28,9 +31,11 @@ namespace Lousy.Mon
             return animation;
         }
 
-        //
-        // Transform immediately before the animation activates
-        //
+        /// <summary>
+        /// Sets the height immediately, before the animation activates.
+        /// </summary>
+        /// <param name="fromValue"></param>
+        /// <returns></returns>
         public HeightAnimator InstantlyFrom(double fromValue)
         {
             FrameworkElement frameworkElem = _elem as FrameworkElement;

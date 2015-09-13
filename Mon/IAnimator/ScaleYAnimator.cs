@@ -4,6 +4,9 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Lousy.Mon
 {
+    /// <summary>
+    /// A frontend for animating the scale of a UIElement along the Y axis
+    /// </summary>
     public class ScaleYAnimator : AbstractAffineDoubleAnimator
     {
         public ScaleYAnimator(UIElement elem) : base(elem) { }
@@ -27,9 +30,11 @@ namespace Lousy.Mon
             return animation;
         }
 
-        //
-        // Transform immediately before the animation activates
-        //
+        /// <summary>
+        /// Sets the Y scale immediately, before the animation activates.
+        /// </summary>
+        /// <param name="fromValue"></param>
+        /// <returns></returns>
         public ScaleYAnimator InstantlyFrom(double fromValue)
         {
             From(fromValue);

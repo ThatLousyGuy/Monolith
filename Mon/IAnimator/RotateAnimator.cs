@@ -4,6 +4,9 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Lousy.Mon
 {
+    /// <summary>
+    /// A frontend for animating the rotation (in degrees) of a UIElement
+    /// </summary>
     public class RotateAnimator : AbstractAffineDoubleAnimator
     {
         public RotateAnimator(UIElement elem) : base(elem) { }
@@ -27,9 +30,11 @@ namespace Lousy.Mon
             return animation;
         }
         
-        //
-        // Transform immediately before the animation activates
-        //
+        /// <summary>
+        /// Sets the rotation immediately, before the animation activates.
+        /// </summary>
+        /// <param name="fromValue"></param>
+        /// <returns></returns>
         public RotateAnimator InstantlyFrom(double fromValue)
         {
             From(fromValue);

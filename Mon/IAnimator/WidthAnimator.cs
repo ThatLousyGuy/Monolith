@@ -4,6 +4,9 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Lousy.Mon
 {
+    /// <summary>
+    /// A frontend for animating the width of a UIElement
+    /// </summary>
     public class WidthAnimator: AbstractDoubleAnimator 
     {
         public WidthAnimator(UIElement elem) : base(elem) { }
@@ -28,9 +31,11 @@ namespace Lousy.Mon
             return animation;
         }
         
-        //
-        // Transform immediately before the animation activates
-        //
+        /// <summary>
+        /// Sets the width immediately, before the animation activates.
+        /// </summary>
+        /// <param name="fromValue"></param>
+        /// <returns></returns>
         public WidthAnimator InstantlyFrom(double fromValue)
         {
             FrameworkElement frameworkElem = _elem as FrameworkElement;

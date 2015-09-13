@@ -27,9 +27,11 @@ namespace Lousy.Mon
             return animation;
         }
 
-        //
-        // Transform immediately before the animation activates
-        //
+        /// <summary>
+        /// Sets the opacity to 0 immediately, before the animation activates.
+        /// </summary>
+        /// <param name="fromValue"></param>
+        /// <returns></returns>
         public FadeAnimator InstantlyFrom(double fromValue)
         {
             From(fromValue);

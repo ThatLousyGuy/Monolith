@@ -4,6 +4,9 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Lousy.Mon
 {
+    /// <summary>
+    /// A frontend for animating the translation of a UIElement along the X axis
+    /// </summary>
     public class MoveXAnimator : AbstractAffineDoubleAnimator
     {
         public MoveXAnimator(UIElement elem) : base(elem) { }
@@ -27,9 +30,11 @@ namespace Lousy.Mon
             return animation;
         }
         
-        //
-        // Transform immediately before the animation activates
-        //
+        /// <summary>
+        /// Sets the X translation immediately, before the animation activates.
+        /// </summary>
+        /// <param name="fromValue"></param>
+        /// <returns></returns>
         public MoveXAnimator InstantlyFrom(double fromValue)
         {
             From(fromValue);

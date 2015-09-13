@@ -4,6 +4,10 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Lousy.Mon
 {
+    /// <summary>
+    /// Represents an animation created using Monolith.
+    /// Used to chain animations together.
+    /// </summary>
     public class EventToken
     {
         protected Timeline _Animation;
@@ -25,13 +29,28 @@ namespace Lousy.Mon
 
         // Prevent public access to the no parameter constructor to make sure
         // it's not used willy-nilly
+        /// <summary>
+        /// Factory method for creating an empty event token.
+        /// Used in conjunction with PassOn for creating animations out of
+        /// order.
+        /// </summary>
+        /// <returns></returns>
         public static EventToken PlaceholderToken()
         {
             return new EventToken();
         }
 
-        // Pass on children to the successor
-        // The children should be activated by the successor's completion events
+        /// <summary>
+        /// Passes on child animations to the specified successor.
+        ///
+        /// The current EventToken's child animations are activated by the
+        /// successor's completion events.
+        ///
+        /// Used in conjunction with EventToken.PlaceHolderToken for creating
+        /// animations out of order.
+        /// </summary>
+        /// <param name="successor"></param>
+        /// <returns></returns>
         public EventToken PassOn(EventToken successor)
         {
             // Unregister for the predecessor's completion events
@@ -75,6 +94,11 @@ namespace Lousy.Mon
             }
         }
 
+        /// <summary>
+        /// Adds a child animation to be activated when the current
+        /// EventToken's animation completes.
+        /// </summary>
+        /// <param name="child"></param>
         public void AddChildAnimator(IAnimator child)
         {
             if (!_Children.ContainsKey(child))
@@ -83,6 +107,11 @@ namespace Lousy.Mon
             }
         }
 
+        /// <summary>
+        /// Adds a child animation to be activated after the specified duration
+        /// after current EventToken's animation completes.
+        /// </summary>
+        /// <param name="child"></param>
         public void AddChildAnimator(IAnimator child, TimeSpan? timespan)
         {
             if (!_Children.ContainsKey(child))

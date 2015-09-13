@@ -7,6 +7,9 @@ namespace Lousy.Mon
 {
     public delegate void CodeDelegate();
 
+    /// <summary>
+    /// A frontend for running arbitrary code after an animation
+    /// </summary>
     public class CodeAnimator : IAnimator
     {
         protected UIElement _elem;
@@ -29,17 +32,31 @@ namespace Lousy.Mon
             _reverse = false;
         }
 
-        
+        /// <summary>
+        /// Dummy function. Does nothing.
+        /// </summary>
+        /// <param name="ease"></param>
+        /// <returns></returns>
         public IAnimator With(EasingFunctionBase ease)
         {
             return this;
         }
 
+        /// <summary>
+        /// Dummy function. Does nothing.
+        /// </summary>
+        /// <param name="duration"></param>
+        /// <param name="timeType"></param>
+        /// <returns></returns>
         public IAnimator For(double duration, OrSo timeType)
         {
             return this;
         }
 
+        /// <summary>
+        /// Dummy function. Does nothing.
+        /// </summary>
+        /// <returns></returns>
         public IAnimator AndReverseIt()
         {
             _reverse = true;
@@ -107,7 +124,6 @@ namespace Lousy.Mon
                     break;
                 case OrSo.Seconds:
                     _animation.BeginTime = new TimeSpan((long)(duration * 1000 * 10000));
-                    _durationDefined = true;
                     break;
                 default:
                     throw new Exception("Improper time type specified");

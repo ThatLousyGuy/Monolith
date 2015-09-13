@@ -10,6 +10,13 @@ namespace Lousy.Mon
 
         public AbstractDoubleAnimator(UIElement elem) : base(elem) { }
 
+        /// <summary>
+        /// Sets the value to animate from.
+        /// If left unset, the animation will start from the current value
+        /// of the property to be animated.
+        /// </summary>
+        /// <param name="fromValue"></param>
+        /// <returns></returns>
         public AbstractDoubleAnimator From(double fromValue)
         {
             _from = fromValue;
@@ -17,6 +24,11 @@ namespace Lousy.Mon
             return this;
         }
 
+        /// <summary>
+        /// Sets the value to animate to.
+        /// </summary>
+        /// <param name="toValue"></param>
+        /// <returns></returns>
         public AbstractDoubleAnimator To(double toValue)
         {
             _to = toValue;
