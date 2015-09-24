@@ -17,7 +17,7 @@ namespace Lousy.Mon
         /// </summary>
         /// <param name="fromValue"></param>
         /// <returns></returns>
-        public AbstractDoubleAnimator From(double fromValue)
+        public virtual AbstractDoubleAnimator From(double fromValue)
         {
             _from = fromValue;
             _fromDefined = true;
@@ -29,7 +29,7 @@ namespace Lousy.Mon
         /// </summary>
         /// <param name="toValue"></param>
         /// <returns></returns>
-        public AbstractDoubleAnimator To(double toValue)
+        public virtual AbstractDoubleAnimator To(double toValue)
         {
             _to = toValue;
             _toDefined = true;

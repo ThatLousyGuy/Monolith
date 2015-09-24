@@ -42,7 +42,7 @@ namespace Lousy.Mon
         /// <param name="duration"></param>
         /// <param name="timeType"></param>
         /// <returns></returns>
-        public IAnimator For(double duration, OrSo timeType)
+        public virtual IAnimator For(double duration, OrSo timeType)
         {
             _duration = new Duration(GetTimeSpan(duration, timeType));
             _durationDefined = true;
@@ -61,11 +61,24 @@ namespace Lousy.Mon
             return this;
         }
 
+        protected void CreateStoryboard()
+        {
+            _animation = CreateAnimation();
+            _storyboard = new Storyboard();
+            ApplyAnimationParams(_animation);
+
+            // Apply Duration
+            _animation.Duration = _duration;
+
+            _storyboard.Children.Add(_animation);
+        }
+
+
         /// <summary>
         /// Executes the animation immediately.
         /// </summary>
         /// <returns>A token representing the animation</returns>
-        public EventToken Now()
+        public virtual EventToken Now()
         {
             if (_storyboard == null)
             {
@@ -89,7 +102,7 @@ namespace Lousy.Mon
         /// <param name="duration"></param>
         /// <param name="timeType"></param>
         /// <returns>A token representing the animation</returns>
-        public EventToken After(double duration, OrSo timeType)
+        public virtual EventToken After(double duration, OrSo timeType)
         {
             if (_storyboard == null)
             {
@@ -110,24 +123,12 @@ namespace Lousy.Mon
             return _eventToken;
         }
         
-        protected void CreateStoryboard()
-        {
-            _animation = CreateAnimation();
-            _storyboard = new Storyboard();
-            ApplyAnimationParams(_animation);
-
-            // Apply Duration
-            _animation.Duration = _duration;
-
-            _storyboard.Children.Add(_animation);
-        }
-
         /// <summary>
         /// Executes the animation after the animation represented by the specified token.
         /// </summary>
         /// <param name="token"></param>
         /// <returns>A token representing the animation</returns>
-        public EventToken After(EventToken token)
+        public virtual EventToken After(EventToken token)
         {
             if (_storyboard == null)
             {
@@ -152,7 +153,7 @@ namespace Lousy.Mon
         /// <param name="duration"></param>
         /// <param name="timeType"></param>
         /// <returns>A token representing the animation</returns>
-        public EventToken After(EventToken token, double duration, OrSo timeType)
+        public virtual EventToken After(EventToken token, double duration, OrSo timeType)
         {
             if (_storyboard == null)
             {

@@ -8,63 +8,60 @@ namespace Lousy.Mon
     public delegate void CodeDelegate();
 
     /// <summary>
-    /// A frontend for running arbitrary code after an animation
+    /// <para>Frontend for running arbitrary code after an animation.</para>
+    /// <para>Note: Specifying a duration using For() creates a dummy animation 
+    /// that lasts for the specified duration.</para>
     /// </summary>
-    public class CodeAnimator : IAnimator
+    public class CodeAnimator : AbstractAnimator
     {
-        protected UIElement _elem;
-        protected EasingFunctionBase _ease;
-        protected bool _fromDefined = false;
-        protected bool _toDefined = false;
-        protected bool _durationDefined = false;
-        protected Duration _duration;
-        protected Timeline _animation;
-        protected Storyboard _storyboard;
-        protected EventToken _eventToken;
         protected CodeDelegate _delegate;
-        protected bool _reverse;
 
-        public CodeAnimator(CodeDelegate del)
+        private CodeAnimator(UIElement elem) : base(elem)
+        {
+
+        }
+
+        public CodeAnimator(CodeDelegate del) : base(new Rectangle())
         {
             _delegate = del;
             _elem = new Rectangle();
+            
+            _duration = new Duration(GetTimeSpan(1, OrSo.Tick));
 
             _reverse = false;
+
         }
 
-        /// <summary>
-        /// Dummy function. Does nothing.
-        /// </summary>
-        /// <param name="ease"></param>
-        /// <returns></returns>
-        public IAnimator With(EasingFunctionBase ease)
+        protected override void ApplyAnimationParams(Timeline animation)
         {
-            return this;
+            DoubleAnimation doubleAnim = animation as DoubleAnimation;
+
+            // Apply To
+            doubleAnim.To = 0.0;
+
+            // Apply From
+            if (_fromDefined)
+            {
+                doubleAnim.From = 1.0;
+            }
         }
 
         /// <summary>
-        /// Dummy function. Does nothing.
+        /// Dummy method. Does nothing.
         /// </summary>
         /// <param name="duration"></param>
         /// <param name="timeType"></param>
         /// <returns></returns>
-        public IAnimator For(double duration, OrSo timeType)
+        public override IAnimator For(double duration, OrSo timeType)
         {
             return this;
         }
 
         /// <summary>
-        /// Dummy function. Does nothing.
+        /// Runs the user code immediately
         /// </summary>
         /// <returns></returns>
-        public IAnimator AndReverseIt()
-        {
-            _reverse = true;
-
-            return this;
-        }
-
-        public EventToken Now()
+        public override EventToken Now()
         {
             if (_storyboard == null)
             {
@@ -73,124 +70,86 @@ namespace Lousy.Mon
 
             // Run the code delegate
             _delegate.Invoke();
-
-            _storyboard.AutoReverse = _reverse;
-
-            // Start the animation
-            _storyboard.Begin();
-
-            if (_eventToken == null)
-            {
-                _eventToken = new EventToken(_animation, _storyboard);
-            }
-            return _eventToken;
+            
+            return base.Now();
         }
 
-        protected void CreateStoryboard()
+        /// <summary>
+        /// <para>Executes the user code after a specified duration.</para>
+        /// <para>Note: This method produces a working EventToken</para>
+        /// </summary>
+        /// <param name="duration"></param>
+        /// <param name="timeType"></param>
+        /// <returns>A token representing the animation</returns>
+        public override EventToken After(double duration, OrSo timeType)
         {
-            _animation = CreateAnimation();
-            _storyboard = new Storyboard();
+            DispatcherTimer timer = new DispatcherTimer();
+            EventToken placeholder = EventToken.PlaceholderToken();
 
-            // Apply nigh-instant duration just to avoid any potential
-            // problems or undefined behavior with 0 duration
-            _animation.Duration = new Duration(TimeSpan.FromTicks(1));
+            timer.Interval = GetTimeSpan(duration, timeType);
+            timer.Tick += (s, e) =>
+            {
+                timer.Stop();
+                placeholder.PassOn(Now());
+            };
+            timer.Start();
 
-            _storyboard.Children.Add(_animation);
+            return placeholder;
         }
 
-        protected Timeline CreateAnimation()
+        /// <summary>
+        /// <para>Executes the user code after the animation
+        /// animation represented by the specified token.</para>
+        /// <para>Note: This method produces a working EventToken</para>
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>A token representing the animation</returns>
+        public override EventToken After(EventToken token)
+        {
+            return base.After(token);
+        }
+
+        /// <summary>
+        /// <para>Executes the user code a specified duration after 
+        /// the animation represented by the specified token.</para>
+        /// <para>Note: This method produces a working EventToken</para>
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="duration"></param>
+        /// <param name="timeType"></param>
+        /// <returns>A token representing the animation</returns>
+        public override EventToken After(EventToken token, double duration, OrSo timeType)
+        {
+            EventToken placeholder = EventToken.PlaceholderToken();
+
+            // Separate the delay into stages
+            // Use another CodeAnimator to trigger the timer after 
+            // the original animation
+            var afterTokenAnimator = new CodeAnimator(() =>
+            {
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = GetTimeSpan(duration, timeType);
+                timer.Tick += (s, e) =>
+                {
+                    timer.Stop();
+                    placeholder.PassOn(Now());
+                };
+                timer.Start();
+            });
+
+            afterTokenAnimator.After(token);
+
+            return placeholder;
+        }
+
+        protected override Timeline CreateAnimation()
         {
             // Create an animation that will be applied to the transform
             DoubleAnimation animation = new DoubleAnimation();
             Storyboard.SetTarget(animation, _elem);
             Storyboard.SetTargetProperty(animation, "Opacity");
-            animation.To = 1;
 
             return animation;
-        }
-
-        public EventToken After(double duration, OrSo timeType)
-        {
-            if (_storyboard == null)
-            {
-                CreateStoryboard();
-            }
-
-            // Apply the begin time
-            switch (timeType)
-            {
-                case OrSo.Ticks:
-                    _animation.BeginTime = new TimeSpan((long)duration);
-                    break;
-                case OrSo.Seconds:
-                    _animation.BeginTime = new TimeSpan((long)(duration * 1000 * 10000));
-                    break;
-                default:
-                    throw new Exception("Improper time type specified");
-            }
-
-            // Run the code delegate
-            _delegate.Invoke();
-
-            _storyboard.AutoReverse = _reverse;
-
-            // Start the animation
-            _storyboard.Begin();
-
-            if (_eventToken == null)
-            {
-                _eventToken = new EventToken(_animation, _storyboard);
-            }
-            return _eventToken;
-        }
-
-        public EventToken After(EventToken token)
-        {
-            if (_storyboard == null)
-            {
-                CreateStoryboard();
-            }
-
-            _storyboard.AutoReverse = _reverse;
-
-            token.AddChildAnimator(this);
-
-            if (_eventToken == null)
-            {
-                _eventToken = new EventToken(_animation, _storyboard);
-            }
-            return _eventToken;
-        }
-
-        public EventToken After(EventToken token, double duration, OrSo timeType)
-        {
-            TimeSpan timespan;
-            if (_storyboard == null)
-            {
-                CreateStoryboard();
-            }
-
-            _storyboard.AutoReverse = _reverse;
-
-            switch (timeType)
-            {
-                case OrSo.Ticks:
-                    timespan = TimeSpan.FromTicks((long)duration);
-                    break ;
-                case OrSo.Seconds:
-                    timespan = TimeSpan.FromSeconds(duration);
-                    break;
-                default:
-                    throw new Exception("Improper time type specified");
-            }
-
-            token.AddChildAnimator(this, timespan);
-
-            if (_eventToken == null)
-            {
-                _eventToken = new EventToken(_animation, _storyboard);
-            }
-            return _eventToken;
         }
     }
 }
