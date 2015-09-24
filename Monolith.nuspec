@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>$id$</id>
-    <version>1.0.0.0</version>
+    <version>1.1.0.0</version>
     <title>Lousy.Monolith</title>
     <authors>Lousy</authors>
     <owners>Lousy</owners>
@@ -10,7 +10,10 @@
     <projectUrl>https://github.com/ThatLousyGuy/Monolith</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Monolith is a Windows library that lets you create animations in codebehind in a fluent, somewhat straightforward manner. It's a wrapper around the Windows.UI.Xaml.Media.Animation library that removes as much of the setup as possible.</description>
-    <releaseNotes>First release of Monolith package</releaseNotes>
+    <releaseNotes>
+      Most methods and classes should now have useful descriptions in Intellisense
+      Oli.Run().Now() and Oli.Run().After() now produce EventTokens that can be used with other animations
+    </releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>Monolith Lousy</tags>
   </metadata>

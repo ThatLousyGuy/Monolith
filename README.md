@@ -13,13 +13,15 @@ Monolith is a Windows library that lets you create animations in codebehind in a
     // Animate a UIElement along the X axis from 0 to 40
     Oli.MoveXOf(uiElem).From(0).To(40).For(0.3, OrSo.Secs).Now();
 
+
     // Rotate UIElement to 90 degrees 
     EventToken rotating =
         Oli.Rotate(uiElem).To(90).For(0.3, OrSo.Secs).With(ExpEaseOut).Now();
+        
     // Fade the opacity to 0 after the rotation finishes
     Oli.Fade(uiElem).To(0).For(0.3, OrSo.Secs).With(ExpEaseOut).After(rotating);
 
-    // Run arbitrary code after the rotation too
+    // Run arbitrary code after the rotation too!
     Oli.Run(() =>
     {
       // Do things here!
@@ -38,15 +40,15 @@ Check out [Monolith on NuGet](https://www.nuget.org/packages/Monolith/)!
 - Hack away!
 
 ## Known issues
-- Classes and methods aren't documented very well right now. It's next on the todo list
 - Using .After(double duration, OrSo type) on successively on the same object with the same animation type is broken (the last call overwrites the previous ones) and it requires an architectural change to fix. Use .After(EventToken token, double duration, OrSo type) instead
+- Setting AndReverseIt() on an animation that is chained to another animation will animate, but will jump to the wrong To() value after the animation ends
 
 ## Testing
 HA
 HAHAHA
 HAHA
 
-Please contact me if you want to help write tests for this
+Please contact me if you want to help write tests
 
 ## Contributing
 Tweet me @ThatLousyGuy if you'd like to help contribute! I've only been adding features as I need them, so if you have an idea for a feature that'd be useful, we should chat about it :D
